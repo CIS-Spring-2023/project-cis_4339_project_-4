@@ -129,12 +129,13 @@ export default {
             </div>
             <!-- End of error alert -->
             <div>
-            <AttendanceChart
-              v-if="!loading && !error"
-              :label="labels"
-              :chart-data="chartData"
-            ></AttendanceChart>
-            <PieChart></PieChart>
+              <AttendanceChart
+               
+               :label="labels"
+               :chart-data="chartData"
+             ></AttendanceChart>
+               <!--v-if="loading && error" Put inside Attendance Chart when Sprint 3 -->
+             <PieChart></PieChart>
           </div>
           </div>
         </div>
