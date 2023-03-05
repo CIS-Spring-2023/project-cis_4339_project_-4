@@ -1,13 +1,27 @@
 <script>
 import { onMounted } from 'vue';
 export default {
-  computed:{
-    serviceList()
-    {
-      const items = JSON.parse(localStorage.getItem('service'));
-      return items;
-  }
-},
+  props:{
+    data:{
+      type:Array,
+      default: () => [],
+    }
+  },
+  data() 
+  {
+    return {
+      serviceInfo: {}
+    };
+  },  
+  mounted() 
+  {   
+      // retrieve data from local storage
+      const data = JSON.parse(localStorage.getItem('service'));
+      if(data)
+      {
+      this.serviceInfo = data;
+      }
+      },
 };
 </script>
 
@@ -36,11 +50,11 @@ export default {
         </tr>
       </thead>
       <tbody class="divide-y divide-gray-300">
-        <tr v-for="item in serviceList" :key="item.id">
+        <tr v-for="item in data" :key="item.id">
           <td class="p-2 text-left">{{item.name}}</td>
           <td class="p-2 text-left">{{item.status}}</td>
           <td class="p-2 text-left">{{item.desc}}</td>
-          <router-link :to="{ name: 'editservice', params: { id: item.id } }">Edit</router-link>
+          <router-link :to="{ name: 'editservice', params: { id: item.id } }">Edit</router-link> 
         </tr>
       </tbody>
     </table>

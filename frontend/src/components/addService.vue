@@ -5,6 +5,7 @@ import axios from 'axios';
 import servicedetail from './servicedetails.vue';
 const apiURL = import.meta.env.VITE_ROOT_API
 export default {
+  name: 'serviceform',
   components:{
     servicedetail,
   },
@@ -18,20 +19,20 @@ export default {
         nextid: 1,
         name: '',
         status: 'Active',
-        description: ''        
+        description: ''
       },
-      arr:[],
+      services: JSON.parse(localStorage.getItem('myData')) || [],
       error: ''
     }
   },
   methods: {
+    
     async handleSubmitForm() {
       this.error = '';
       if (!this.service.name)
       {
         this.error = 'Service Name is required'
-      }
-      
+      }      
       // If no errors found. then the form is submitted
       if (this.error==='') 
       {
@@ -51,13 +52,14 @@ export default {
             status: this.service.status,
             desc: this.service.description
           }
-          this.arr.push(newService)
-          localStorage.setItem('service',JSON.stringify(this.arr)); 
+          this.services.push(newService)
+          localStorage.setItem('service',JSON.stringify(this.services));
+          
           //Increase the id
           this.service.nextid++;
-          //Reset the form data
           this.service.name='';
-          this.service.description= '';
+          this.service.description='';
+          this.service.status='Active';
       }
     },
   },
@@ -74,7 +76,7 @@ export default {
     </div>
     <div class="px-10 py-20">
       <!-- @submit.prevent stops the submit event from reloading the page-->
-      <form @submit.prevent="handleSubmitForm">
+      <form id="serviceForm" @submit.prevent="handleSubmitForm">
         <!-- grid container -->
         <div
           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10"
@@ -139,13 +141,13 @@ export default {
               </label>
             </div>
        <div class="flex justify-between mt-10 mr-20">
-          <button class="bg-red-700 text-white rounded" type="submit">
+          <button class="bg-red-700 text-white rounded" >
             Add New Service
           </button>
         </div>
         </div>
         <div>
-          <servicedetail></servicedetail>
+          <servicedetail :data = "services"></servicedetail>
         </div>
       </form>
     </div>
