@@ -22,7 +22,7 @@ export default {
     error: ''
     }
   },
-  mounted() {
+  created() {
     const serviceid = this.$route.params.id // get the ID from the URL
           const storedData = JSON.parse(localStorage.getItem('service'));
           const selectedData = storedData.find(item => item.id == serviceid); 
@@ -34,7 +34,7 @@ export default {
    methods: {    
     async handleSubmitForm() {
       this.error = '';
-      if (!this.service.name)
+      if (!this.selectedData.name)
       {
         this.error = 'Service Name is required'
       }      
@@ -50,15 +50,21 @@ export default {
           .catch((error) => {
             console.log(error)
           }) */
-          
-          
-          
+          const services = JSON.parse(localStorage.getItem('service')) || [];
+          const updateService = services.map( s=>
+          {
+            if (s.id == this.selectedData.id)
+            {
+              return { ...s, ...this.selectedData};
+            }
+            else
+            { return s;}
+          });
+          localStorage.setItem('service', JSON.stringify(updateService));
+          alert('Customer information updated successfully!');
+          this.$router.push('/addService') 
       }
     },
-    goBack(){
-      localStorage.setItem('service',JSON.stringify(this.selectedData));
-      this.$router.push('/addService')
-    }
   }, 
 };
 

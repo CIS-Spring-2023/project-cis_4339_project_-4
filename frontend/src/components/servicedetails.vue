@@ -10,10 +10,10 @@ export default {
   data() 
   {
     return {
-      serviceInfo: {}
+      serviceInfo: []
     };
   },  
-  mounted() 
+  created() 
   {   
       // retrieve data from local storage
       const data = JSON.parse(localStorage.getItem('service'));
@@ -50,7 +50,7 @@ export default {
         </tr>
       </thead>
       <tbody class="divide-y divide-gray-300">
-        <tr v-for="item in data" :key="item.id">
+        <tr v-for="item in serviceInfo" :key="item.id">
           <td class="p-2 text-left">{{item.name}}</td>
           <td class="p-2 text-left">{{item.status}}</td>
           <td class="p-2 text-left">{{item.desc}}</td>
@@ -62,4 +62,3 @@ export default {
 </div>
 </main>
 </template>
-

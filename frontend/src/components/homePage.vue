@@ -107,7 +107,6 @@ export default {
             </tbody>
           </table>
           <div>
-            
             <!-- Start of loading animation -->
             <div class="mt-40" v-if="loading">
               <p
@@ -130,10 +129,11 @@ export default {
             <!-- End of error alert -->
             <div>
             <AttendanceChart
-              v-if="!loading && !error"
+               
               :label="labels"
               :chart-data="chartData"
             ></AttendanceChart>
+              <!--v-if="loading && error" Put inside Attendance Chart when Sprint 3 -->
             <PieChart></PieChart>
           </div>
           </div>
