@@ -79,8 +79,7 @@ export default {
                 <span
                   style="position: relative; top: 6px"
                   class="material-icons"
-                  >add</span
-                >
+                  >add</span>
                 Add Service
               </router-link>
             </li>
