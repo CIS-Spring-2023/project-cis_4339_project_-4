@@ -50,8 +50,6 @@ function apiLogin(u, p) {
   if (u === "viewer" && p === "viewer") {
     return Promise.resolve({ isAllowed: true,role: 2,name: "Viewer" });
   }
-  if (p === u) {
-    return Promise.resolve({ isAllowed: false });
-  }
+  //if (p === u) { return Promise.resolve({ isAllowed: false });}
   return Promise.reject(new Error("invalid"));
 }
