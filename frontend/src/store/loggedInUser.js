@@ -36,7 +36,8 @@ export const useLoggedInUserStore = defineStore({
     logout() {
       this.patch({
         name: "",
-        isLoggedIn: false
+        isLoggedIn: false,
+        role: 0
       });
     }
   }
