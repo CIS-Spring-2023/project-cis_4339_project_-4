@@ -1,7 +1,6 @@
 <script>
 import axios from 'axios'
 const apiURL = import.meta.env.VITE_ROOT_API
-
 export default {
   name: 'App',
   data() {
@@ -13,7 +12,7 @@ export default {
     axios.get(`${apiURL}/org`).then((res) => {
       this.orgName = res.data.name
     })
-  }
+  },
 }
 </script>
 <template>
@@ -24,7 +23,7 @@ export default {
           <img class="m-auto" src="@\assets\DanPersona.svg" />
         </section>
         <nav class="mt-10">
-          <ul class="flex flex-col gap-4">
+          <ul class="flex flex-col gap-4">            
             <li>
               <router-link to="/">
                 <span
@@ -80,19 +79,8 @@ export default {
                 <span
                   style="position: relative; top: 6px"
                   class="material-icons"
-                  >event</span
-                >
+                  >add</span>
                 Add Service
-              </router-link>
-            </li>
-            <li>
-              <router-link to="/servicedetails">
-                <span
-                  style="position: relative; top: 6px"
-                  class="material-icons"
-                  >event</span
-                >
-                Service Details
               </router-link>
             </li>
           </ul>

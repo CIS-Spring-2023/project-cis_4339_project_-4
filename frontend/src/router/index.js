@@ -4,6 +4,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 const routes = [
   {
     path: '/',
+    name: 'home',
     props: true,
     component: () => import('../components/homePage.vue')
   },
@@ -12,6 +13,12 @@ const routes = [
     name: 'intakeform',
     props: true,
     component: () => import('../components/intakeForm.vue')
+  },
+  {
+    path: '/addService',
+    name: 'addService',
+    props: true,
+    component: () => import('../components/addService.vue')
   },
   {
     path: '/findclient',
@@ -39,7 +46,14 @@ const routes = [
     name: 'eventdetails',
     props: true,
     component: () => import('../components/eventDetails.vue')
+  },
+  {
+    path: '/editservice/:id',
+    name: 'editservice',
+    props: true,
+    component: () => import('../components/editservice.vue')
   }
+  
 ]
 const router = createRouter({
   history: createWebHistory(),
