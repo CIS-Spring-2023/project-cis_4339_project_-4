@@ -66,7 +66,7 @@
                 Find Client
               </router-link>
             </li>
-            <li>
+            <li v-if="user.isLoggedIn && user.role === 1">
               <router-link to="/addService">
                 <span
                   style="position: relative; top: 6px"
