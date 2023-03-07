@@ -66,6 +66,15 @@
                 Find Client
               </router-link>
             </li>
+            <li>
+              <router-link to="/addService">
+                <span
+                  style="position: relative; top: 6px"
+                  class="material-icons"
+                  >add</span>
+                Add Service
+              </router-link>
+            </li>
             <li v-if="user.isLoggedIn">
               <router-link to="/findevents">
                 <span
@@ -85,15 +94,6 @@
                   </span> Logout 
                 </a>
               </li>
-            <li>
-              <router-link to="/addService">
-                <span
-                  style="position: relative; top: 6px"
-                  class="material-icons"
-                  >add</span>
-                Add Service
-              </router-link>
-            </li>
           </ul>
         </nav>
       </header>
