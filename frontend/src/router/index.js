@@ -8,13 +8,19 @@ const routes = [
     component: () => import('../components/loginPage.vue'),
     meta: { requiresAuth: false}
   },
-    {
-      path: '/',
-      name: 'home',
-      props: true,
-      component: () => import('../components/homePage.vue'),
-      meta: { requiresAuth: true}
-    },
+    path: '/',
+    name: 'home',
+    props: true,
+    component: () => import('../components/homePage.vue'),
+    meta: { requiresAuth: true}
+  },
+  {
+    path: '/addService',
+    name: 'addService',
+    props: true,
+    component: () => import('../components/addService.vue'),
+    meta: { requiresAuth: true, role: 1 }
+  },
     {
       path: '/intakeform',
       name: 'intakeform',
@@ -69,4 +75,3 @@ const routes = [
   })
 
   export default router
-  

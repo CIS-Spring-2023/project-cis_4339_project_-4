@@ -26,6 +26,7 @@
                 > Welcome, {{ user.name }}
               </a>
             </li>
+          <ul class="flex flex-col gap-4">            
             <li>
               <router-link to="/">
                 <span
@@ -85,6 +86,15 @@
                   </span> Logout 
                 </a>
               </li>
+            <li>
+              <router-link to="/addService">
+                <span
+                  style="position: relative; top: 6px"
+                  class="material-icons"
+                  >add</span>
+                Add Service
+              </router-link>
+            </li>
           </ul>
         </nav>
       </header>
