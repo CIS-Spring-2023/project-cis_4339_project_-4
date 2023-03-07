@@ -8,6 +8,7 @@ const routes = [
     component: () => import('../components/loginPage.vue'),
     meta: { requiresAuth: false}
   },
+  {
     path: '/',
     name: 'home',
     props: true,
