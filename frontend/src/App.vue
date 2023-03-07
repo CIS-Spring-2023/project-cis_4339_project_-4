@@ -25,8 +25,7 @@
                   >account_circle</span
                 > Welcome, {{ user.name }}
               </a>
-            </li>
-          <ul class="flex flex-col gap-4">            
+            </li>          
             <li>
               <router-link to="/">
                 <span
