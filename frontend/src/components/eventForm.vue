@@ -23,8 +23,20 @@ export default {
           zip: ''
         },
         description: ''
-      }
+      },
+      // Create an empty array to store all the service data from the local storage
+      serviceInfo: []
     }
+  },
+  mounted() 
+  {   
+      // Retrieve service data from local storage and display in the Create new event form (Only display the service with Active status)
+      const data = JSON.parse(localStorage.getItem('service'));
+      if(data)
+      {
+      this.serviceInfo = data;
+      }
+      console.log(this.serviceInfo)
   },
   methods: {
     async handleSubmitForm() {
@@ -188,6 +200,22 @@ export default {
                 <span class="ml-2">Early Childhood Education</span>
               </label>
             </div>
+            <!-- Using a v-for directective to loop through the serviceInfo array and display all the service information -->
+            <div v-for="item in serviceInfo">
+              <div v-if="item.status !== 'Inactive'"> <!-- Using a v-if directective to display service with Active status -->
+              <label for="${item.name}" class="inline-flex items-center">
+                <input
+                  type="checkbox"
+                  id="${item.name}"
+                  value="${item.name}"
+                  v-model="event.services"
+                  class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-offset-0 focus:ring-indigo-200 focus:ring-opacity-50"
+                  notchecked
+                />
+                <span class="ml-2">{{ item.name }}</span>
+              </label>
+            </div>
+          </div>
           </div>
         </div>
 

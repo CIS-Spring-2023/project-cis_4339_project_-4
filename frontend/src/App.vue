@@ -1,5 +1,5 @@
-
 <template>
+  <!-- Only display certain option in the navigation panel for logged in users with certain roles -->
   <main class="flex flex-row">
     <div id="_container" class="h-screen">
       <header class="w-full">

@@ -16,6 +16,7 @@ export default {
     const borderColor = backgroundColor.map((e) =>
       e.replace(/[\d\.]+\)$/g, '1)')
     )
+    //Hard-coded data for the bar chart in the main page  
     await new Chart(this.$refs.attendanceChart, {
       type: 'bar',
       data: {

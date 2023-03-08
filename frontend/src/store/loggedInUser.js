@@ -11,8 +11,9 @@ export const useLoggedInUserStore = defineStore({
       isLoggedIn: false,
     }
   },
-
-
+// Get username, password value from the form and send to the simulated login API
+// If the username and password match, set isAllowed to true and direct user to the home page using router
+// If the username and password match, set isAllowed to false and prompt an error message
   actions: {
     async login(username, password) {
       try {
@@ -34,6 +35,7 @@ export const useLoggedInUserStore = defineStore({
       }
     },
     logout() {
+      //Reset value after user log out
       this.patch({
         name: "",
         role: 0,
@@ -42,7 +44,7 @@ export const useLoggedInUserStore = defineStore({
     }
   }
 });
-
+//Simulate a login API to check username and password
 function apiLogin(u, p) {
   if (u === "admin" && p === "admin") {
     return Promise.resolve({ isAllowed: true,role: 1,name: "Admin" });

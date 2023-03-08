@@ -41,6 +41,8 @@
   
   <script>
   import { useLoggedInUserStore } from "@/store/loggedInUser";
+  // Include the useLoggedInUserStore from the loggedInUser child component
+  // Get the prop data including username and password
   export default {
     data: () => {
       return {
