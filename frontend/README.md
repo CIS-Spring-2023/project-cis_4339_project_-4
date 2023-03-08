@@ -1,4 +1,4 @@
-Sprint 2: Frontend Development
+### Sprint 2: Frontend Development
 # Data Platform Frontend
 
 This project uses [VueJS 3](https://vuejs.org/) with [Vite](https://vitejs.dev/) and [TailwindCSS](https://tailwindcss.com/).
@@ -12,33 +12,35 @@ For form validation [Vuelidate](https://vuelidate-next.netlify.app/) is used.
 
     npm run dev
 
-### In the web browser, enter http://localhost:5173/ to access the page
+# In the web browser, enter http://localhost:5173/ to access the page
 
-### In the Login page, there are two users currently created in the system
+## Login
+In the Login page, there are two users currently created in the system
 1. Edittor user: 
 - Username: admin
 - Password: admin
-Restriction: Can see and access all the views
+- Restriction: Can see and access all the views
 2. Viewer user:
 - Username: viewer
 - Password: viewer
-Restriction: Can only see and access to the Dashboard, Find Client, Find Event views
+- Restriction: Can only see and access to the Dashboard, Find Client, Find Event views
 3. Guest user without logging in can only access Dashboard and Login page
-*User after logging in will see the 'Welcome, user' and Logout option in the Navigation Panel
+* User after logging in will see the 'Welcome, user' and Logout option in the Navigation Panel
 
-### In the Dashboard, all user can see the bar chart of 'Number of attendees in Events', and a pie chart of 'Number of attendees by Zipcode'
+## Functions:
+1. In the Dashboard, all users can see the bar chart of 'Number of attendees in Events', and a pie chart of 'Number of attendees by Zipcode'
 
-### Users can create new services in the 'Add Service' view by entering Service Name, Description, and choose Status (Active by default) in a form. 
+2. Users can create new services in the 'Add Service' view by entering Service Name, Description, and choose Status (Active by default) in a form. 
 The newly created services will be listed under the form, inside the 'List of Services'.
 
-### Users can edit certain service by clicking the Edit button next to the service and will be directed to the Edit Service view.
+3. Users can edit certain service by clicking the Edit button next to the service and will be directed to the Edit Service view.
 After editting, users will be redirected back to the 'Add Service' view to see the updates in the 'List of Services'
 
-### Users can deactivate certain service by clicking the 'Deactivate' button next to the service, and that service status will be changed to 'Inactive'
+4. Users can deactivate certain service by clicking the 'Deactivate' button next to the service, and that service status will be changed to 'Inactive'
 
-### All the services with Active status will be listed in the 'Create Event' view.
+5. All the services with Active status will be listed in the 'Create Event' view.
 
-Sprint 3:
+### Sprint 3:
 ### Before startup
 You need to either have a local backend running and or use a cloud deployed backend.
 
