@@ -76,6 +76,16 @@
               </router-link>
             </li>
             <li v-if="user.isLoggedIn">
+              <router-link to="/findservices">
+                <span
+                  style="position: relative; top: 6px"
+                  class="material-icons"
+                  >search</span
+                >
+                Find Service
+              </router-link>
+            </li>
+            <li v-if="user.isLoggedIn">
               <router-link to="/findevents">
                 <span
                   style="position: relative; top: 6px"
