@@ -7,6 +7,8 @@ For form validation [Vuelidate](https://vuelidate-next.netlify.app/) is used.
 ## Project setup
 
     npm install
+    npm pinia
+    npm axios
 
 ### Compiles and hot-reloads for development
 
@@ -24,7 +26,7 @@ In the Login page, there are two users currently created in the system
 2. Viewer user:
 - Username: viewer
 - Password: viewer
-- Restriction: Can only see and access to the Dashboard, Find Client, Find Event views
+- Restriction: Can only see and access to the Dashboard, Find Client, Find Event and Find Service views.
 3. Guest user without logging in can only access Dashboard and Login page
 * User after logging in will see the 'Welcome, user' and Logout option in the Navigation Panel
 
