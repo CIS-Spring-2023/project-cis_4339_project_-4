@@ -16,10 +16,11 @@ For form validation [Vuelidate](https://vuelidate-next.netlify.app/) is used.
 
 ## Login
 In the Login page, there are two users currently created in the system
-1. Edittor user: 
+1. Editor user: 
 - Username: admin
 - Password: admin
 - Restriction: Can see and access all the views
+
 2. Viewer user:
 - Username: viewer
 - Password: viewer
