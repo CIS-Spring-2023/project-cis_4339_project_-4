@@ -42,6 +42,7 @@ export const useLoggedInUserStore = defineStore({
         role: 0,
         isLoggedIn: false,
       });
+      this.$router.push("/");
     }
   }
 });

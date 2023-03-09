@@ -46,6 +46,16 @@
                 Client Intake Form
               </router-link>
             </li>
+            <li v-if="user.isLoggedIn">
+              <router-link to="/findclient">
+                <span
+                  style="position: relative; top: 6px"
+                  class="material-icons"
+                  >person_search</span
+                >
+                Find Client
+              </router-link>
+            </li>
             <li v-if="user.isLoggedIn && user.role === 1">
               <router-link to="/eventform">
                 <span
@@ -54,35 +64,6 @@
                   >event</span
                 >
                 Create Event
-              </router-link>
-            </li>
-            <li v-if="user.isLoggedIn">
-              <router-link to="/findclient">
-                <span
-                  style="position: relative; top: 6px"
-                  class="material-icons"
-                  >search</span
-                >
-                Find Client
-              </router-link>
-            </li>
-            <li v-if="user.isLoggedIn && user.role === 1">
-              <router-link to="/addService">
-                <span
-                  style="position: relative; top: 6px"
-                  class="material-icons"
-                  >add</span>
-                Add Service
-              </router-link>
-            </li>
-            <li v-if="user.isLoggedIn">
-              <router-link to="/findservices">
-                <span
-                  style="position: relative; top: 6px"
-                  class="material-icons"
-                  >search</span
-                >
-                Find Service
               </router-link>
             </li>
             <li v-if="user.isLoggedIn">
@@ -95,6 +76,26 @@
                 Find Event
               </router-link>
             </li>
+            <li v-if="user.isLoggedIn && user.role === 1">
+              <router-link to="/addService">
+                <span
+                  style="position: relative; top: 6px"
+                  class="material-icons"
+                  >add_circle</span>
+                Add Service
+              </router-link>
+            </li>
+            <li v-if="user.isLoggedIn">
+              <router-link to="/findservices">
+                <span
+                  style="position: relative; top: 6px"
+                  class="material-icons"
+                  >manage_search</span
+                >
+                Find Service
+              </router-link>
+            </li>
+            
             <li v-if="user.isLoggedIn">
                 <br>
                 <a href="">
