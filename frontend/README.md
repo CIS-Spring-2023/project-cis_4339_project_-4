@@ -7,6 +7,7 @@ For form validation [Vuelidate](https://vuelidate-next.netlify.app/) is used.
 ## Project setup
 
     npm install
+    npm install pinia-plugin-persistedstate
     npm pinia
     npm axios
 
