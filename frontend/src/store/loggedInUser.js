@@ -24,12 +24,7 @@ export const useLoggedInUserStore = defineStore({
           role: response.role,
           name: response.name
         })
-        if (response.isAllowed) {
-          this.$router.push("/");
-        } else {
-          this.$store.commit("setUser", null);
-          alert("Invalid credentials. Please try again.");
-        }
+        this.$router.push("/");
       } catch (error) {
         console.log(error)
         alert("Invalid credentials. Please try again.");
@@ -37,14 +32,17 @@ export const useLoggedInUserStore = defineStore({
     },
     logout() {
       //Reset value after user log out
-      this.patch({
+      this.$patch({
         name: "",
         role: 0,
-        isLoggedIn: false,
+        isLoggedIn: false
       });
-      this.$router.push("/");
     }
-  }
+  },
+  persist: {
+    storage: sessionStorage
+  } 
+
 });
 //Simulate a login API to check username and password
 function apiLogin(u, p) {
@@ -58,7 +56,7 @@ function apiLogin(u, p) {
 }
 
 //defining a store for findServices.Vue
-export const findServicesStore = defineStore({
+/* export const findServicesStore = defineStore({
 
   id: 'findServicesStore',
   state: () => {
@@ -91,11 +89,8 @@ export const findServicesStore = defineStore({
 
       ]
     }
-  },
-
-
-  actions: {
-
   }
-});
+
+
+}); */
 

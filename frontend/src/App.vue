@@ -90,21 +90,19 @@
                 <span
                   style="position: relative; top: 6px"
                   class="material-icons"
-                  >manage_search</span
-                >
+                  >manage_search</span>
                 Find Service
               </router-link>
             </li>
             
             <li v-if="user.isLoggedIn">
-                <br>
-                <a href="">
-                  <span
-                  @click="store.logout()" class="nav-link"><i style="position: relative; top: 6px"
-                  class="material-icons">logout</i>
+              <router-link to="/" v-on:click="user.logout()">
+                  <span style="position: relative; top: 6px"
+                  class="material-icons">logout
                   </span> Logout 
-                </a>
+              </router-link>
               </li>
+            
           </ul>
         </nav>
       </header>
