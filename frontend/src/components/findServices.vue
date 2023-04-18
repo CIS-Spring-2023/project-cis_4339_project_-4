@@ -2,7 +2,6 @@
 import { DateTime } from 'luxon'
 import axios from 'axios'
 const apiURL = import.meta.env.VITE_ROOT_API
-import { findServicesStore } from "@/store/loggedInUser"
 
 export default {
   data() {
@@ -11,12 +10,8 @@ export default {
       // Parameter for search to occur
       searchBy: 'Service Name',
       serviceName: '',
-      foundServices: []
+      status: ''
     }
-  },
-  setup() {
-    const findservicesstore = findServicesStore()
-    return { findservicesstore }
   },
   mounted() {
     this.getServices()
@@ -32,37 +27,29 @@ export default {
         .toLocaleString()
     },
     handleSubmitForm() {
-      this.foundServices = []
-    //REMOVE COMMENT TO FETCH SERVICES ON SEARCH USING SEARCH API
-    //   let endpoint = ''
-    //   if (this.searchBy === 'Service Name') {
-    //     endpoint = `services/search/?serviceName=${this.serviceName}&searchBy=name`
-    //   }
-    //   axios.get(`${apiURL}/${endpoint}`).then((res) => {
-    //     this.services = res.data
-    //   })
-        
-        for (let serviceIndex in this.services){
-          if (this.services[serviceIndex].serviceName.includes(this.serviceName)){
-            this.foundServices.push(this.services[serviceIndex])
-          } 
-        }
-
+       let endpoint = ''
+       if (this.searchBy === 'Service Name') {
+         endpoint = `services/search/?serviceName=${this.serviceName}&searchBy=name`
+       }
+       else if (this.searcgBy === 'Status'){
+        endpoint = `events/search/?servicestatus=${this.status}&searchBy=status`
+       }
+       axios.get(`${apiURL}/${endpoint}`).then((res) => {
+         this.services = res.data
+       })
      },
-    // abstracted method to get services
+    // abstracted method to get events
     getServices() {
-      //REMOVE COMMENTS TO FETCH SERVICES VIA API
-      // axios.get(`${apiURL}/services`).then((res) => {
-      //   this.services = res.data
-      // })
-      this.services = this.findservicesstore.services
+       axios.get(`${apiURL}/services`).then((res) => {
+         this.services = res.data
+       })
       window.scrollTo(0, 0)
     },
     clearSearch() {
       // Resets all the variables
       this.searchBy = 'Service Name'
       this.serviceName = ''
-      this.foundServices = []
+      this.status = ''
       this.getServices()
     },
     editService(serviceID) {
@@ -87,7 +74,15 @@ export default {
       >
         <h2 class="text-2xl font-bold">Service Name</h2>
         <!-- Displays Service Name search field -->
-
+        <div class="flex flex-col">
+          <select
+            class="rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            v-model="searchBy"
+          >
+            <option value="Service Name">Service Name</option>
+            <option value="Status">Service Status</option>
+          </select>
+        </div>
         <!--REMOVE COMMENTS TO ENABLE SEARCH SERVICE BY NAME/DESCRIPTION 
         <div class="flex flex-col">
           

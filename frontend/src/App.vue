@@ -135,7 +135,11 @@ export default {
   },
   created() {
     axios.get(`${apiURL}/org`).then((res) => {
+      if (res.data && res.data.name) {
       this.orgName = res.data.name
+    } else {
+      console.error('Invalid response from server:', res)
+    }
     })
   },
     setup() {

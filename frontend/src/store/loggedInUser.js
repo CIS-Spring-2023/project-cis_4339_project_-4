@@ -38,11 +38,10 @@ export const useLoggedInUserStore = defineStore({
         isLoggedIn: false
       });
     }
-  },
+  }/* ,
   persist: {
     storage: sessionStorage
-  } 
-
+  }  */
 });
 //Simulate a login API to check username and password
 function apiLogin(u, p) {
@@ -55,42 +54,4 @@ function apiLogin(u, p) {
   return Promise.reject(new Error("invalid"));
 }
 
-//defining a store for findServices.Vue
-/* export const findServicesStore = defineStore({
-
-  id: 'findServicesStore',
-  state: () => {
-    return {
-      services: [
-        {
-          serviceID: 101,
-          serviceName: 'Family Support',
-          serviceDescription: 'Offering support to family members.',
-          serviceStatus: 'active'
-        },
-        {
-          serviceID: 102,
-          serviceName: 'Adult Education',
-          serviceDescription: 'Adult teaching session.',
-          serviceStatus: 'active'
-        },
-        {
-          serviceID: 103,
-          serviceName: 'Youth Services Program',
-          serviceDescription: 'Various activities dedicated to young people.',
-          serviceStatus: 'active'
-        },
-        {
-          serviceID: 104,
-          serviceName: 'Childhood Education',
-          serviceDescription: 'Children teaching session.',
-          serviceStatus: 'active'
-        }
-
-      ]
-    }
-  }
-
-
-}); */
 
