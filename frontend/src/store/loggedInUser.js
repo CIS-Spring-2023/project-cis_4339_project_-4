@@ -8,8 +8,7 @@ export const useLoggedInUserStore = defineStore({
     return {
       name: "",
       role: 0,
-      isLoggedIn: false,
-
+      isLoggedIn: false
     }
   },
 // Get username, password value from the form and send to the simulated login API
@@ -18,13 +17,15 @@ export const useLoggedInUserStore = defineStore({
   actions: {
     async login(username, password) {
       try {
-        const response = await apiLogin(username, password);
-        this.$patch({
-          isLoggedIn: response.isAllowed,
+        const response = await axios.put(`${apiURL}/login`, {username, password})
+        .then((response) => {
+          this.$patch({
+          //isLoggedIn: response.isAllowed,
           role: response.role,
           name: response.name
         })
         this.$router.push("/");
+        })
       } catch (error) {
         console.log(error)
         alert("Invalid credentials. Please try again.");
@@ -38,13 +39,13 @@ export const useLoggedInUserStore = defineStore({
         isLoggedIn: false
       });
     }
-  }/* ,
-  persist: {
-    storage: sessionStorage
-  }  */
+  }
 });
+
+
+
 //Simulate a login API to check username and password
-function apiLogin(u, p) {
+/* function apiLogin(u, p) {
   if (u === "admin" && p === "admin") {
     return Promise.resolve({ isAllowed: true, role: 1, name: "Admin" });
   }
@@ -52,6 +53,5 @@ function apiLogin(u, p) {
     return Promise.resolve({ isAllowed: true, role: 2, name: "Viewer" });
   }
   return Promise.reject(new Error("invalid"));
-}
-
+} */
 

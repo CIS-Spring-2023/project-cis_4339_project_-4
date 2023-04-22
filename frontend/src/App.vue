@@ -134,7 +134,7 @@ export default {
     }
   },
   created() {
-    axios.get(`${apiURL}/org`).then((res) => {
+    axios.get(`${apiURL}/orgs`).then((res) => {
       if (res.data && res.data.name) {
       this.orgName = res.data.name
     } else {

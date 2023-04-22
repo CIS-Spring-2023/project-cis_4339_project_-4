@@ -16,11 +16,17 @@ export default {
       labels: [],
       chartData: [],
       loading: false,
-      error: null
+      error: null,
+      zipcount:[],
+      piedata:[],
+      pielabel:[],
+      loading2:false,
+      error2:null,
     }
   },
   mounted() {
-    this.getAttendanceData()
+    this.getAttendanceData(),
+    this.getZipData()
   },
   methods: {
     async getAttendanceData() {
@@ -68,8 +74,43 @@ export default {
     editEvent(eventID) {
       this.$router.push({ name: 'eventdetails', params: { id: eventID } })
     }
-  }
-}
+  ,async getZipData() {
+      try {
+        this.error2 = null
+        this.loading2 = true
+        const response = await axios.get(`${apiURL}/clients/zipcount`)
+        console.log(response.data)
+        this.zipcount = response.data
+        this.pielabel = response.data.map(
+          (item) => item._id
+        )
+        this.piedata = response.data.map((item) => item.count)
+        console.log(this.pielabel)
+        console.log(this.piedata)
+      } catch (err) {
+        if (err.response) {
+          // client received an error response (5xx, 4xx)
+          this.error2 = {
+            title: 'Server Response',
+            message: err.message
+          }
+        } else if (err.request) {
+          // client never received a response, or request never left
+          this.error2 = {
+            title: 'Unable to Reach Server',
+            message: err.message
+          }
+        } else {
+          // There's probably an error in your code
+          this.error2 = {
+            title: 'Application Error',
+            message: err.message
+          }
+        }
+      }
+      this.loading2 = false
+    }
+  }}
 </script>
 
 <template>
@@ -107,6 +148,11 @@ export default {
             </tbody>
           </table>
           <div>
+            <AttendanceChart
+              v-if="!loading && !error"
+              :label="labels"
+              :chart-data="chartData"
+            ></AttendanceChart>
             <!-- Start of loading animation -->
             <div class="mt-40" v-if="loading">
               <p
@@ -127,15 +173,55 @@ export default {
               </p>
             </div>
             <!-- End of error alert -->
-            <div>
-            <AttendanceChart
-               
-              :label="labels"
-              :chart-data="chartData"
-            ></AttendanceChart>
-              <!--v-if="loading && error" Put inside Attendance Chart when Sprint 3 -->
-            <PieChart></PieChart> <!-- Include a pie chart from PieChart.vue component-->
+
+            <div class="ml-10"></div>
+        <div class="flex flex-col col-span-2">
+          <table class="min-w-full shadow-md rounded">
+            <thead class="bg-gray-50 text-xl">
+              <tr class="p-4 text-left">
+                <th class="p-4 text-left">Zip Code</th>
+                <th class="p-4 text-left">Number of Attendees</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-300">
+              <tr
+                v-for="zip in zipcount"
+                :key="zip._id"
+              >
+                <td class="p-2 text-left">{{ zip._id }}</td>
+                <td class="p-2 text-left">{{ zip.count}}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div>
+            <PieChart
+              v-if="!loading2 && !error2"
+              :label="pielabel"
+              :chart-data="piedata"
+            ></PieChart>
+
+            <!-- Start of loading animation -->
+            <div class="mt-40" v-if="loading2">
+              <p
+                class="text-6xl font-bold text-center text-gray-500 animate-pulse"
+              >
+                Loading...
+              </p>
+            </div>
+            <!-- End of loading animation -->
+
+            <!-- Start of error alert -->
+            <div class="mt-12 bg-red-50" v-if="error2">
+              <h3 class="px-4 py-1 text-4xl font-bold text-white bg-red-800">
+                {{ error2.title }}
+              </h3>
+              <p class="p-4 text-lg font-bold text-red-900">
+                {{ error2.message }}
+              </p>
+            </div>
+            <!-- End of error alert -->
           </div>
+        </div>
           </div>
         </div>
       </div>

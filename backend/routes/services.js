@@ -20,7 +20,7 @@ router.get('/', (req, res, next) => {
     .sort({ name: 1 })
     .limit(10)
 })
-// GET all services for org
+// GET all active services for org
 router.get('/active', (req, res, next) => {
   services
     .find({ $and: [{org: org }, {status: 'Active'}] } , (error, data) => {
@@ -48,7 +48,30 @@ router.get('/id/:id', (req, res, next) => {
   })
 })
 
-//...Search service
+// GET events based on search query
+// Ex: '...?name=Food&searchBy=name'
+router.get('/search/', (req, res, next) => {
+  const dbQuery = { org: org }
+  switch (req.query.searchBy) {
+    case 'name':
+      // match event name, no anchor
+      dbQuery.name = { $regex: `${req.query.name}`, $options: 'i' }
+      break
+    case 'status':
+      dbQuery.status = { $eq: req.query.status }
+      break
+    default:
+      return res.status(400).send('invalid searchBy')
+  }
+  services.find(dbQuery, (error, data) => {
+    if (error) {
+      return next(error)
+    } else {
+      res.json(data)
+    }
+  })
+})
+
 
 // POST new service
 router.post('/', (req, res, next) => {
@@ -62,7 +85,7 @@ router.post('/', (req, res, next) => {
     }
   })
 })
-/* 
+ 
 // PUT update service
 router.put('/update/:id', (req, res, next) => {
     services.findByIdAndUpdate(req.params.id, req.body, (error, data) => {
@@ -74,63 +97,33 @@ router.put('/update/:id', (req, res, next) => {
   })
 })
 
-// PUT add service to event
-router.put('/register', (req, res, next) => {
-    services.find(
-    { _id: req.query.event, attendees: req.query.client },
-    (error, data) => {
-      if (error) {
-        return next(error)
-      } else {
-        // only add attendee if not yet signed up
-        if (!data.length) {
-          events.findByIdAndUpdate(
-            req.query.event,
-            { $push: { attendees: req.query.client } },
-            (error, data) => {
-              if (error) {
-                console.log(error)
-                return next(error)
-              } else {
-                res.send('Services added to event')
-              }
-            }
-          )
-        } else {
-          res.status(400).send('Client already added to event')
-        }
-      }
-    }
-  )
-})
+// PUT soft delete service by change status to inactive
+router.put('/updatestatus/:id', (req, res, next) => {
+          services.findByIdAndUpdate(req.params.id, {status:'Inactive'}, {new: true}, (err, data)=> {
+          if(err)
+          {
+            res.status(500).send('Error Occurred');
+            return next(error)
+          }
+          else
+          {
+            res.send('Success')
+          }
+        })
+  })
 
-// PUT remove attendee from event
-router.put('/deregister', (req, res, next) => {
-  events.findByIdAndUpdate(
-    req.query.event,
-    { $pull: { attendees: req.query.client } },
-    (error, data) => {
-      if (error) {
-        console.log(error)
-        return next(error)
-      } else {
-        res.send('Client deregistered with event')
-      }
-    }
-  )
-})
 
 // hard DELETE event by ID, as per project specifications
 router.delete('/:id', (req, res, next) => {
-  events.findByIdAndDelete(req.params.id, (error, data) => {
+  services.findByIdAndDelete(req.params.id, (error, data) => {
     if (error) {
       return next(error)
     } else if (!data) {
-      res.status(400).send('Event not found')
+      res.status(400).send('Service not found')
     } else {
-      res.send('Event deleted')
+      res.send('Service deleted')
     }
   })
-}) */
+}) 
 
 module.exports = router
