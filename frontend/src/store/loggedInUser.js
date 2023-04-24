@@ -1,4 +1,8 @@
 import { defineStore } from 'pinia'
+import axios from 'axios'
+
+
+const apiURL = import.meta.env.VITE_ROOT_API
 
 //defining a store
 export const useLoggedInUserStore = defineStore({
@@ -17,15 +21,20 @@ export const useLoggedInUserStore = defineStore({
   actions: {
     async login(username, password) {
       try {
-        const response = await axios.put(`${apiURL}/login`, {username, password})
-        .then((response) => {
-          this.$patch({
-          //isLoggedIn: response.isAllowed,
-          role: response.role,
-          name: response.name
-        })
+        console.log(username, password)
+        const response = await axios.post(`${apiURL}/users/login`, {username, password});
+        console.log(response)
+        if(response)
+        {
+        this.$patch({
+          isLoggedIn: 'true',
+          role: response.data.role,
+          name: response.data.username
+        });
+        console.log(response)
         this.$router.push("/");
-        })
+        
+      }
       } catch (error) {
         console.log(error)
         alert("Invalid credentials. Please try again.");
@@ -41,17 +50,3 @@ export const useLoggedInUserStore = defineStore({
     }
   }
 });
-
-
-
-//Simulate a login API to check username and password
-/* function apiLogin(u, p) {
-  if (u === "admin" && p === "admin") {
-    return Promise.resolve({ isAllowed: true, role: 1, name: "Admin" });
-  }
-  if (u === "viewer" && p === "viewer") {
-    return Promise.resolve({ isAllowed: true, role: 2, name: "Viewer" });
-  }
-  return Promise.reject(new Error("invalid"));
-} */
-

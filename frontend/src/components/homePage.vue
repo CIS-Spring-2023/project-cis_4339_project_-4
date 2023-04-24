@@ -74,19 +74,17 @@ export default {
     editEvent(eventID) {
       this.$router.push({ name: 'eventdetails', params: { id: eventID } })
     }
-  ,async getZipData() {
+  ,
+  async getZipData() {
       try {
         this.error2 = null
         this.loading2 = true
         const response = await axios.get(`${apiURL}/clients/zipcount`)
-        console.log(response.data)
         this.zipcount = response.data
         this.pielabel = response.data.map(
           (item) => item._id
         )
         this.piedata = response.data.map((item) => item.count)
-        console.log(this.pielabel)
-        console.log(this.piedata)
       } catch (err) {
         if (err.response) {
           // client received an error response (5xx, 4xx)
