@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-
+import axios from 'axios'
+const apiURL = import.meta.env.VITE_ROOT_API
 //defining a store
 export const useLoggedInUserStore = defineStore({
 
@@ -8,47 +9,40 @@ export const useLoggedInUserStore = defineStore({
     return {
       name: "",
       role: 0,
-      isLoggedIn: false,
+      isLoggedIn: false
     }
   },
-
-
-  actions: {
-    async login(username, password) {
-      try {
-        const response = await apiLogin(username, password);
+// Get username, password value from the form and send to the simulated login API
+// If the username and password match, set isAllowed to true and direct user to the home page using router
+// If the username and password match, set isAllowed to false and prompt an error message
+actions: {
+  async login(username, password) {
+    try {
+      console.log(username,password)
+      const response = await axios.post(`${apiURL}/users/login`, { username, password })
+      console.log(response)
+      if (response) {
         this.$patch({
-          isLoggedIn: response.isAllowed,
-          role: response.role,
-          name: response.name
+          role: response.data.role,
+          name: response.data.username,
+          isLoggedIn: true
         })
-        if (response.isAllowed) {
-          this.$router.push("/");
-        } else {
-          this.$store.commit("setUser", null);
-          alert("Invalid credentials. Please try again.");
-        }
-      } catch(error) {
-        console.log(error)
-        alert("Invalid credentials. Please try again.");
+        this.$router.push('/')
+        console.log(response)
+      } else {
+        alert('Invalid credentials. Please try again.')
       }
-    },
-    logout() {
-      this.patch({
-        name: "",
-        role: 0,
-        isLoggedIn: false,
-      });
+    } catch (error) {
+      console.log(error)
+      alert('Invalid credentials. Please try again.')
     }
+  },
+  logout() {
+    this.$patch({
+      name: '',
+      role: '',
+      isLoggedIn: false
+    })
   }
-});
-
-function apiLogin(u, p) {
-  if (u === "admin" && p === "admin") {
-    return Promise.resolve({ isAllowed: true,role: 1,name: "Admin" });
-  }
-  if (u === "viewer" && p === "viewer") {
-    return Promise.resolve({ isAllowed: true,role: 2,name: "Viewer" });
-  }
-  return Promise.reject(new Error("invalid"));
 }
+});

@@ -1,5 +1,5 @@
-
 <template>
+  <!-- Only display certain option in the navigation panel for logged in users with certain roles -->
   <main class="flex flex-row">
     <div id="_container" class="h-screen">
       <header class="w-full">
@@ -25,8 +25,7 @@
                   >account_circle</span
                 > Welcome, {{ user.name }}
               </a>
-            </li>
-          <ul class="flex flex-col gap-4">            
+            </li>          
             <li>
               <router-link to="/">
                 <span
@@ -37,7 +36,7 @@
                 Dashboard
               </router-link>
             </li>
-            <li v-if="user.isLoggedIn && user.role === 1">
+            <li v-if="user.isLoggedIn && user.role === '1'">
               <router-link to="/intakeform">
                 <span
                   style="position: relative; top: 6px"
@@ -47,7 +46,17 @@
                 Client Intake Form
               </router-link>
             </li>
-            <li v-if="user.isLoggedIn && user.role === 1">
+            <li v-if="user.isLoggedIn">
+              <router-link to="/findclient">
+                <span
+                  style="position: relative; top: 6px"
+                  class="material-icons"
+                  >person_search</span
+                >
+                Find Client
+              </router-link>
+            </li>
+            <li v-if="user.isLoggedIn && user.role === '1'">
               <router-link to="/eventform">
                 <span
                   style="position: relative; top: 6px"
@@ -55,16 +64,6 @@
                   >event</span
                 >
                 Create Event
-              </router-link>
-            </li>
-            <li v-if="user.isLoggedIn">
-              <router-link to="/findclient">
-                <span
-                  style="position: relative; top: 6px"
-                  class="material-icons"
-                  >search</span
-                >
-                Find Client
               </router-link>
             </li>
             <li v-if="user.isLoggedIn">
@@ -77,24 +76,33 @@
                 Find Event
               </router-link>
             </li>
-            <li v-if="user.isLoggedIn">
-                <br>
-                <a href="">
-                  <span
-                  @click="store.logout()" class="nav-link"><i style="position: relative; top: 6px"
-                  class="material-icons">logout</i>
-                  </span> Logout 
-                </a>
-              </li>
-            <li>
+            <li v-if="user.isLoggedIn && user.role === '1'">
               <router-link to="/addService">
                 <span
                   style="position: relative; top: 6px"
                   class="material-icons"
-                  >add</span>
+                  >add_circle</span>
                 Add Service
               </router-link>
             </li>
+            <li v-if="user.isLoggedIn">
+              <router-link to="/findservices">
+                <span
+                  style="position: relative; top: 6px"
+                  class="material-icons"
+                  >manage_search</span>
+                Find Service
+              </router-link>
+            </li>
+            
+            <li v-if="user.isLoggedIn">
+              <router-link to="/" v-on:click="user.logout()">
+                  <span style="position: relative; top: 6px"
+                  class="material-icons">logout
+                  </span> Logout 
+              </router-link>
+              </li>
+            
           </ul>
         </nav>
       </header>
@@ -126,8 +134,12 @@ export default {
     }
   },
   created() {
-    axios.get(`${apiURL}/org`).then((res) => {
+    axios.get(`${apiURL}/orgs`).then((res) => {
+      if (res.data && res.data.name) {
       this.orgName = res.data.name
+    } else {
+      console.error('Invalid response from server:', res)
+    }
     })
   },
     setup() {

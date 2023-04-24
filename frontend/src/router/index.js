@@ -8,6 +8,7 @@ const routes = [
     component: () => import('../components/loginPage.vue'),
     meta: { requiresAuth: false}
   },
+  {
     path: '/',
     name: 'home',
     props: true,
@@ -20,6 +21,12 @@ const routes = [
     props: true,
     component: () => import('../components/addService.vue'),
     meta: { requiresAuth: true, role: 1 }
+  },
+  {
+    path: '/findservices',
+    name: 'findservices',
+    component: () => import('../components/findServices.vue'),
+    meta: { requiresAuth: true}
   },
     {
       path: '/intakeform',

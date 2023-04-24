@@ -2,67 +2,58 @@
 import useVuelidate from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
 import axios from 'axios';
-import servicedetail from './servicedetails.vue';
 const apiURL = import.meta.env.VITE_ROOT_API
 export default {
   name: 'serviceform',
-  components:{
-    servicedetail,
-  },
   setup() {
     return { v$: useVuelidate({ $autoDirty: true }) }
   },
   data() {
     return {
-      // removed unnecessary extra array to track services
+      /* org: '', */
       service: {
-        nextid: 1,
         name: '',
         status: 'Active',
         description: ''
-      },
-      services: JSON.parse(localStorage.getItem('myData')) || [],
-      error: ''
+      }
     }
+  } ,  
+  /* created() {
+    axios.get(`${apiURL}/org`).then((res) => {
+      this.org = res.data._id
+    })
   },
-  methods: {
-    
+  mounted() {
+    window.scrollTo(0, 0)
+  }, */
+  methods: {    
     async handleSubmitForm() {
-      this.error = '';
-      if (!this.service.name)
-      {
-        this.error = 'Service Name is required'
-      }      
+      // Checks to see if there are any errors in validation
+      const isFormCorrect = await this.v$.$validate()
+      // If no errors found. isFormCorrect = True then the form is submitted
       // If no errors found. then the form is submitted
-      if (this.error==='') 
+      if (isFormCorrect) 
       {
-        /* axios
+         axios
           .post(`${apiURL}/services`, this.service)
           .then(() => {
-            alert('Event has been added.')
-            this.$router.push({ name: 'findservice' })
+            alert('Service has been added.')
+            //this.$router.push({ name: 'findservice' })
           })
           .catch((error) => {
             console.log(error)
-          }) */
-          const newService = 
-          {
-            id: this.service.nextid,
-            name: this.service.name,
-            status: this.service.status,
-            desc: this.service.description
-          }
-          this.services.push(newService)
-          localStorage.setItem('service',JSON.stringify(this.services));
-          
-          //Increase the id
-          this.service.nextid++;
-          this.service.name='';
-          this.service.description='';
-          this.service.status='Active';
+          })
       }
     },
   },
+  // sets validations for the various data properties
+  validations() {
+    return {
+      service: {
+        name: { required }
+      }
+    }
+  }
 }
 </script>
 <template>
@@ -92,9 +83,13 @@ export default {
                 class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                 v-model="service.name"
               />
-              <span class="text-black" v-if="error">
-                <p class="text-red-700" >
-                  {{ error }}!
+              <span class="text-black" v-if="v$.service.name.$error">
+                <p
+                  class="text-red-700"
+                  v-for="error of v$.service.name.$errors"
+                  :key="error.$uid"
+                >
+                  {{ error.$message }}!
                 </p>
               </span>
             </label>
@@ -146,16 +141,12 @@ export default {
           </button>
         </div>
         </div>
-        <div>
-          <servicedetail :data = "services"></servicedetail>
-        </div>
       </form>
     </div>
+    <hr class="mt-10 mb-10" />
+<div
+  class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10 content-center"
+>  
+</div>
   </main>
 </template>
-
-<style>
-label {
-  margin-right: 200px;
-}
-</style>

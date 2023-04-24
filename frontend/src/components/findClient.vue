@@ -1,7 +1,7 @@
 <script>
 import axios from 'axios'
 const apiURL = import.meta.env.VITE_ROOT_API
-
+import { useLoggedInUserStore } from "@/store/loggedInUser";
 export default {
   data() {
     return {
@@ -12,6 +12,10 @@ export default {
       lastName: '',
       phoneNumber: ''
     }
+  },
+  setup() {
+    const user = useLoggedInUserStore();
+    return { user };
   },
   created() {
     this.getClients()
@@ -151,8 +155,8 @@ export default {
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-300">
-            <tr
-              @click="editClient(client._id)"
+            <tr 
+              @click="user.role === '1' && editClient(client._id)"
               v-for="client in queryData"
               :key="client._id"
             >
