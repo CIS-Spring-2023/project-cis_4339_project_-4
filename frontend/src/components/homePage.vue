@@ -4,7 +4,7 @@ import axios from 'axios'
 import AttendanceChart from './barChart.vue'
 import PieChart from './PieChart.vue'
 const apiURL = import.meta.env.VITE_ROOT_API
-
+import { useLoggedInUserStore } from "@/store/loggedInUser";
 export default {
   components: {
     AttendanceChart,
@@ -23,6 +23,10 @@ export default {
       loading2:false,
       error2:null,
     }
+  },
+  setup() {
+    const user = useLoggedInUserStore();
+    return { user };
   },
   mounted() {
     this.getAttendanceData(),
@@ -137,7 +141,7 @@ export default {
             </thead>
             <tbody class="divide-y divide-gray-300">
               <tr
-                @click="editEvent(event._id)"
+                @click="user.role === '1' && editEvent(event._id)"
                 v-for="event in recentEvents"
                 :key="event._id"
               >
