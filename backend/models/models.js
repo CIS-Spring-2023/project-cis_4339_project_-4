@@ -12,6 +12,10 @@ const orgDataSchema = new Schema(
     name: {
       type: String,
       required: true
+    },
+    org: {
+      type: String,
+      required: true
     }
   },
   {
