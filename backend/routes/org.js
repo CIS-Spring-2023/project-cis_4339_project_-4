@@ -1,14 +1,15 @@
 const express = require('express')
 const router = express.Router()
 
-const org = process.env.ORG
+const orgid = process.env.ORG
 
 // importing data model schemas
 const { orgs } = require('../models/models')
 
 // GET org
 router.get('/', (req, res, next) => {
-  orgs.findById(org, (error, data) => {
+  console.log(orgid)
+  orgs.findOne({ org : orgid }, (error, data) => {
     if (error) {
       return next(error)
     } else {

@@ -1,45 +1,55 @@
-<template>
-    <div>
-      <div class="flex flex-col col-span-2 content-center">
-    <table class="min-w-full shadow-md rounded">
-      <thead class="bg-gray-50 text-xl">
-        <tr>
-          <th class="p-4 text-left">ZipCode</th>
-          <th class="p-4 text-left">Number of Attendees</th>
-        </tr>
-      </thead>
-      <tbody class="divide-y divide-gray-300">
-        <tr v-for="(zip,index) in this.pieChartData.data.labels">
-          <td class="p-2 text-left">{{zip}}</td>
-          <td class="p-2 text-left">
-            <span v-for="(dataset, datasetIndex) in this.pieChartData.data.datasets">{{ dataset.data[index] }}</span></td>
-        </tr>        
-      </tbody>
-    </table>
-  </div>
-      <!-- canvas element for chart -->
-      <label class="font-bold text-4xl text-red-700 tracking-widest text-center mt-10">Number of Attendees by Zipcode</label>
-      <canvas id="pie-chart"></canvas>
-    </div>
-  </template>
+<script>
+import { Chart, registerables } from 'chart.js'
+Chart.register(...registerables)
 
-  <script>
-  import { Chart, registerables } from 'chart.js'
-  import pieChartData from '../assets/piechart-data.js'
-  
-  //we have to register the registerables with Chart object
-  Chart.register(...registerables);
-  export default {
-    name: 'PieChart',
-    data() {
-      return {
-        pieChartData: pieChartData
-      }
+export default {
+  props: {
+    label: {
+      type: Array
     },
-    //establish Chart object after mounting the component
-    mounted() {
-      const ctx = document.getElementById('pie-chart');
-      new Chart(ctx, this.pieChartData);
+    chartData: {
+      type: Array
+    }
+  },
+  async mounted() {
+    const backgroundColor = this.chartData.map(() => this.getColor())
+    const borderColor = backgroundColor.map((e) =>
+      e.replace(/[\d\.]+\)$/g, '1)')
+    )
+    await new Chart(this.$refs.attendanceChart, {
+      type: 'pie',
+      data: {
+        labels: this.label,
+        datasets: [
+          {
+            borderWidth: 1,
+            backgroundColor: backgroundColor,
+            borderColor: borderColor,
+            data: this.chartData
+          }
+        ]
+      },
+      options: {
+        plugins: {
+          legend: {
+            display: true
+          }
+        },
+        responsive: true,
+        maintainAspectRatio: true
+      }
+    })
+  },
+  methods: {
+    getColor() {
+      let channel = () => Math.random() * 255
+      return `rgba(${channel()}, ${channel()}, ${channel()}, 0.7)`
     }
   }
-  </script>
+}
+</script>
+<template>
+  <div class="shadow-lg rounded-lg overflow-hidden">
+    <canvas class="p-10" ref="attendanceChart"></canvas>
+  </div>
+</template>

@@ -12,6 +12,10 @@ const orgDataSchema = new Schema(
     name: {
       type: String,
       required: true
+    },
+    org: {
+      type: String,
+      required: true
     }
   },
   {
@@ -80,9 +84,10 @@ const clientDataSchema = new Schema(
 const eventDataSchema = new Schema(
   {
     _id: { type: String, default: uuid.v1 },
-    org: {
-      type: String,
-      required: true
+    orgs: {
+      type: [{ type: String, ref: 'org' }],
+      required: true,
+      validate: [(org) => org.length > 0, 'needs at least one org']
     },
     name: {
       type: String,
@@ -90,7 +95,8 @@ const eventDataSchema = new Schema(
     },
     services: [
       {
-        type: String
+        type: String,
+        ref: 'service'
       }
     ],
     date: {
@@ -129,10 +135,71 @@ const eventDataSchema = new Schema(
   }
 )
 
+// collection for service
+const serviceDataSchema = new Schema(
+  {
+    _id: {
+      type: String,
+      default: uuid.v1
+    },
+    name: {
+      type: String,
+      required: true
+    },
+    description:
+    {
+      type: String
+    },
+    status: {
+      type: String,
+      required: true
+    },
+    orgs: {
+      type: [{ type: String, ref: 'org' }],
+      required: true,
+      validate: [(org) => org.length > 0, 'needs at least one org']
+    }
+  },
+  {
+    collection: 'service'
+  }
+)
+
+// collection for user
+const userDataSchema = new Schema(
+  {
+    name:{
+      type: String,
+      required: true
+    },
+    username: {
+      type: String,
+      required: true
+    },
+    password:
+    {
+      type: String,
+      required: true
+    },
+    role: {
+      type: String,
+      required: true
+    },
+    orgs: {
+      type: [{ type: String, ref: 'org' }],
+      required: true,
+      validate: [(org) => org.length > 0, 'needs at least one org']
+    }
+  },
+  {
+    collection: 'user'
+  }
+)
 // create models from mongoose schemas
 const clients = mongoose.model('client', clientDataSchema)
 const orgs = mongoose.model('org', orgDataSchema)
 const events = mongoose.model('event', eventDataSchema)
-
+const services = mongoose.model('service', serviceDataSchema)
+const users = mongoose.model('user', userDataSchema)
 // package the models in an object to export
-module.exports = { clients, orgs, events }
+module.exports = { clients, orgs, events, services, users }

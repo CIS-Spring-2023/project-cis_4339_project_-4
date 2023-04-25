@@ -25,18 +25,17 @@ export default {
         description: ''
       },
       // Create an empty array to store all the service data from the local storage
-      serviceInfo: []
+      activeServices: []
     }
   },
   mounted() 
   {   
-      // Retrieve service data from local storage and display in the Create new event form (Only display the service with Active status)
-      const data = JSON.parse(localStorage.getItem('service'));
-      if(data)
-      {
-      this.serviceInfo = data;
-      }
-      console.log(this.serviceInfo)
+      // Retrieve service data  (Only display the service with Active status)
+      axios.get(`${apiURL}/services/active`).then( response =>{
+        this.activeServices = response.data;
+      }).catch(error=> {
+        console.log(error);
+      });
   },
   methods: {
     async handleSubmitForm() {
@@ -148,66 +147,12 @@ export default {
           <!-- form field -->
           <div class="flex flex-col grid-cols-3">
             <label>Services Offered at Event</label>
-            <div>
-              <label for="familySupport" class="inline-flex items-center">
+            <!-- Using a v-for directective to loop through the activeServices array and display all the service information -->
+             <div v-for="item in activeServices" :key="item._id">
+              <label class="inline-flex items-center">
                 <input
                   type="checkbox"
-                  id="familySupport"
-                  value="Family Support"
-                  v-model="event.services"
-                  class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-offset-0 focus:ring-indigo-200 focus:ring-opacity-50"
-                  notchecked
-                />
-                <span class="ml-2">Family Support</span>
-              </label>
-            </div>
-            <div>
-              <label for="adultEducation" class="inline-flex items-center">
-                <input
-                  type="checkbox"
-                  id="adultEducation"
-                  value="Adult Education"
-                  v-model="event.services"
-                  class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-offset-0 focus:ring-indigo-200 focus:ring-opacity-50"
-                  notchecked
-                />
-                <span class="ml-2">Adult Education</span>
-              </label>
-            </div>
-            <div>
-              <label for="youthServices" class="inline-flex items-center">
-                <input
-                  type="checkbox"
-                  id="youthServices"
-                  value="Youth Services Program"
-                  v-model="event.services"
-                  class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-offset-0 focus:ring-indigo-200 focus:ring-opacity-50"
-                  notchecked
-                />
-                <span class="ml-2">Youth Services Program</span>
-              </label>
-            </div>
-            <div>
-              <label for="childhoodEducation" class="inline-flex items-center">
-                <input
-                  type="checkbox"
-                  id="childhoodEducation"
-                  value="Early Childhood Education"
-                  v-model="event.services"
-                  class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-offset-0 focus:ring-indigo-200 focus:ring-opacity-50"
-                  notchecked
-                />
-                <span class="ml-2">Early Childhood Education</span>
-              </label>
-            </div>
-            <!-- Using a v-for directective to loop through the serviceInfo array and display all the service information -->
-            <div v-for="item in serviceInfo">
-              <div v-if="item.status !== 'Inactive'"> <!-- Using a v-if directective to display service with Active status -->
-              <label for="${item.name}" class="inline-flex items-center">
-                <input
-                  type="checkbox"
-                  id="${item.name}"
-                  value="${item.name}"
+                  :value="item._id"
                   v-model="event.services"
                   class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-offset-0 focus:ring-indigo-200 focus:ring-opacity-50"
                   notchecked
@@ -215,7 +160,6 @@ export default {
                 <span class="ml-2">{{ item.name }}</span>
               </label>
             </div>
-          </div>
           </div>
         </div>
 

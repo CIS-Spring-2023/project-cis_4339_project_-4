@@ -6,6 +6,25 @@ const org = process.env.ORG
 // importing data model schemas
 const { clients } = require('../models/models')
 
+//GET Count the number of clients group by zip code
+router.get('/zipcount', (req, res, next) => {
+  clients.aggregate([
+     { $match: { orgs: org }} , 
+     { $unwind: "$address" },
+     { $match: { "address.zip": { $ne: "" } } },
+    { $group: {
+      _id: '$address.zip',
+      count: { $sum: 1 }
+    }}
+  ],(err, results) => {
+    if (err) {
+      return next(err);
+    } else {
+      return res.json(results);
+    }
+  })
+})
+
 // GET 10 most recent clients for org
 router.get('/', (req, res, next) => {
   clients

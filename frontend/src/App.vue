@@ -36,7 +36,7 @@
                 Dashboard
               </router-link>
             </li>
-            <li v-if="user.isLoggedIn && user.role === 1">
+            <li v-if="user.isLoggedIn && user.role === '1'">
               <router-link to="/intakeform">
                 <span
                   style="position: relative; top: 6px"
@@ -56,7 +56,7 @@
                 Find Client
               </router-link>
             </li>
-            <li v-if="user.isLoggedIn && user.role === 1">
+            <li v-if="user.isLoggedIn && user.role === '1'">
               <router-link to="/eventform">
                 <span
                   style="position: relative; top: 6px"
@@ -76,7 +76,7 @@
                 Find Event
               </router-link>
             </li>
-            <li v-if="user.isLoggedIn && user.role === 1">
+            <li v-if="user.isLoggedIn && user.role === '1'">
               <router-link to="/addService">
                 <span
                   style="position: relative; top: 6px"
@@ -135,7 +135,12 @@ export default {
   },
   created() {
     axios.get(`${apiURL}/org`).then((res) => {
+      console.log(res.data)
+      if (res.data && res.data.name) {
       this.orgName = res.data.name
+    } else {
+      console.error('Invalid response from server:', res)
+    }
     })
   },
     setup() {

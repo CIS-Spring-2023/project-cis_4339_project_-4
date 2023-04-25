@@ -1,4 +1,8 @@
 import { defineStore } from 'pinia'
+import axios from 'axios'
+
+
+const apiURL = import.meta.env.VITE_ROOT_API
 
 //defining a store
 export const useLoggedInUserStore = defineStore({
@@ -8,8 +12,7 @@ export const useLoggedInUserStore = defineStore({
     return {
       name: "",
       role: 0,
-      isLoggedIn: false,
-
+      isLoggedIn: false
     }
   },
 // Get username, password value from the form and send to the simulated login API
@@ -18,13 +21,20 @@ export const useLoggedInUserStore = defineStore({
   actions: {
     async login(username, password) {
       try {
-        const response = await apiLogin(username, password);
+        console.log(username, password)
+        const response = await axios.post(`${apiURL}/users/login`, {username, password});
+        console.log(response)
+        if(response)
+        {
         this.$patch({
-          isLoggedIn: response.isAllowed,
-          role: response.role,
-          name: response.name
-        })
+          isLoggedIn: 'true',
+          role: response.data.role,
+          name: response.data.username
+        });
+        console.log(response)
         this.$router.push("/");
+        
+      }
       } catch (error) {
         console.log(error)
         alert("Invalid credentials. Please try again.");
@@ -38,59 +48,5 @@ export const useLoggedInUserStore = defineStore({
         isLoggedIn: false
       });
     }
-  },
-  persist: {
-    storage: sessionStorage
-  } 
-
+  }
 });
-//Simulate a login API to check username and password
-function apiLogin(u, p) {
-  if (u === "admin" && p === "admin") {
-    return Promise.resolve({ isAllowed: true, role: 1, name: "Admin" });
-  }
-  if (u === "viewer" && p === "viewer") {
-    return Promise.resolve({ isAllowed: true, role: 2, name: "Viewer" });
-  }
-  return Promise.reject(new Error("invalid"));
-}
-
-//defining a store for findServices.Vue
-/* export const findServicesStore = defineStore({
-
-  id: 'findServicesStore',
-  state: () => {
-    return {
-      services: [
-        {
-          serviceID: 101,
-          serviceName: 'Family Support',
-          serviceDescription: 'Offering support to family members.',
-          serviceStatus: 'active'
-        },
-        {
-          serviceID: 102,
-          serviceName: 'Adult Education',
-          serviceDescription: 'Adult teaching session.',
-          serviceStatus: 'active'
-        },
-        {
-          serviceID: 103,
-          serviceName: 'Youth Services Program',
-          serviceDescription: 'Various activities dedicated to young people.',
-          serviceStatus: 'active'
-        },
-        {
-          serviceID: 104,
-          serviceName: 'Childhood Education',
-          serviceDescription: 'Children teaching session.',
-          serviceStatus: 'active'
-        }
-
-      ]
-    }
-  }
-
-
-}); */
-
