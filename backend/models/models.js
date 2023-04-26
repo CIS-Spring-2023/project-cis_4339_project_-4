@@ -168,15 +168,11 @@ const serviceDataSchema = new Schema(
 // collection for user
 const userDataSchema = new Schema(
   {
-    name:{
-      type: String,
-      required: true
-    },
     username: {
       type: String,
       required: true
     },
-    password:
+    hashedPassword:
     {
       type: String,
       required: true
@@ -185,11 +181,6 @@ const userDataSchema = new Schema(
       type: String,
       required: true
     },
-    orgs: {
-      type: [{ type: String, ref: 'org' }],
-      required: true,
-      validate: [(org) => org.length > 0, 'needs at least one org']
-    }
   },
   {
     collection: 'user'

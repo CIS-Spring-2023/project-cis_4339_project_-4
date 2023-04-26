@@ -1,32 +1,56 @@
-const express = require('express')
-const router = express.Router()
+const express = require('express');
+const router = express.Router();
 const bcrypt = require('bcrypt');
-
-const org = process.env.ORG
-
-// importing data model schemas
-const { users } = require('../models/models')
-
-// POST user login
+const { users } = require('../models/models');
+const saltRounds = 10;
+const salt = bcrypt.genSaltSync(saltRounds);
+// POST /users/login - login
 router.post('/login', async (req, res, next) => {
-  const user = req.body;
-  console.log(req.body);
-  users.findOne({  org: user.org,  username: user.username }, async (err, foundUser) => {
-    if (err) {
-      console.error(err);
-      res.status(500).send('An error occurred while logging in');
-    } else if (!foundUser) {
-      res.status(401).send('Incorrect username or password');
-    } else {
-      // Use bcrypt.compare to verify if the provided password matches the stored hashed password
-      const isMatch = await bcrypt.compare(user.password, foundUser.password);
-      if (isMatch) {
-        res.status(200).json(foundUser);
-      } else {
-        res.status(401).send('Incorrect username or password');
-      }
+  try {
+    console.log('Hello')
+    const { username, password} = req.body;
+    const user = await users.findOne({ username:username });
+    console.log('username:', username);
+    console.log('password:', password);
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid username or password' });
     }
-  });
+    const isMatch = await bcrypt.compare(password, user.hashedPassword);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Invalid username or password' });
+    }
+    else{
+      res.status(200).json(user);
+    }
+    res.status(200).json({ message: 'Login successful' });
+    console.log(user.hashedPassword);
+    console.log(user.role);
+  } catch (err) {
+    next(err);
+  }
 });
 
-module.exports = router
+// POST /users - create a new user
+router.post('/', async (req, res, next) => {
+  try {
+    const { username, password, role } = req.body;
+    const hashedPassword = await bcrypt.hash(password, salt);
+    const user = new users({ username, hashedPassword, role });
+    await user.save();
+    res.status(201).send(user);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// GET /users - retrieve all users
+router.get('/', async (req, res, next) => {
+  try {
+    const userList = await users.find();
+    res.send(userList);
+  } catch (err) {
+    next(err);
+  }
+});
+
+module.exports = router;
