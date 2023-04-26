@@ -19,16 +19,16 @@ router.post('/login', async (req, res, next) => {
     if (!isMatch) {
       return res.status(401).json({ message: 'Invalid username or password' });
     }
-    else{
+    else {
       res.status(200).json(user);
     }
-    res.status(200).json({ message: 'Login successful' });
     console.log(user.hashedPassword);
     console.log(user.role);
   } catch (err) {
     next(err);
   }
 });
+
 
 // POST /users - create a new user
 router.post('/', async (req, res, next) => {
