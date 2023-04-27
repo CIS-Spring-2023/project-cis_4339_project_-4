@@ -43,6 +43,12 @@ const routes = [
       meta: { requiresAuth: true, role: 1 }
     },
     {
+      path: '/findservices',
+      name: 'findservices',
+      component: () => import('../components/findServices.vue'),
+      meta: { requiresAuth: true, role: 1}
+    },,
+    {
       path: '/eventform',
       name: 'eventform',
       component: () => import('../components/eventForm.vue'),
