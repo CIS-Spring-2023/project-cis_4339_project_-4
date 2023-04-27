@@ -1,114 +1,101 @@
 <script>
+import { DateTime } from 'luxon'
 import axios from 'axios'
 const apiURL = import.meta.env.VITE_ROOT_API
-import { useLoggedInUserStore } from "@/store/loggedInUser";
+
 export default {
   data() {
     return {
-      queryData: [],
+      events: [],
       // Parameter for search to occur
       searchBy: '',
-      firstName: '',
-      lastName: '',
-      phoneNumber: ''
+      serviceName: ''
     }
   },
-  setup() {
-    const user = useLoggedInUserStore();
-    return { user };
-  },
-  created() {
-    this.getClients()
+  mounted() {
+    this.getServices()
   },
   methods: {
+    // better formattedDate
+    formattedDate(datetimeDB) {
+      const dt = DateTime.fromISO(datetimeDB, {
+        zone: 'utc'
+      })
+      return dt
+        .setZone(DateTime.now().zoneName, { keepLocalTime: true })
+        .toLocaleString()
+    },
     handleSubmitForm() {
       let endpoint = ''
-      if (this.searchBy === 'Client Name') {
-        endpoint = `clients/search/?firstName=${this.firstName}&lastName=${this.lastName}&searchBy=name`
-      } else if (this.searchBy === 'Client Number') {
-        endpoint = `clients/search/?phoneNumber.primary=${this.phoneNumber}&searchBy=number`
+      if (this.searchBy === 'Service Name') {
+        endpoint = `services/search/?serviceName=${this.serviceName}&searchBy=name`
       }
       axios.get(`${apiURL}/${endpoint}`).then((res) => {
-        this.queryData = res.data
+        this.services = res.data
       })
     },
-    // abstract get clients call
-    getClients() {
-      axios.get(`${apiURL}/clients`).then((res) => {
-        this.queryData = res.data
+    // abstracted method to get services
+    getServices() {
+      axios.get(`${apiURL}/services`).then((res) => {
+        this.events = res.data
       })
       window.scrollTo(0, 0)
     },
     clearSearch() {
       // Resets all the variables
       this.searchBy = ''
-      this.firstName = ''
-      this.lastName = ''
-      this.phoneNumber = ''
-
-      // get all entries
-      this.getClients()
+      this.serviceNname = ''
+      this.getServices()
     },
-    editClient(clientID) {
-      this.$router.push({ name: 'updateclient', params: { id: clientID } })
+    editService(eventID) {
+      this.$router.push({ name: 'servicedetails', params: { id: serviceID } })
     }
   }
 }
 </script>
+
 <template>
   <main>
     <div>
       <h1
         class="font-bold text-4xl text-red-700 tracking-widest text-center mt-10"
       >
-        Find Client
+        List of Services
       </h1>
     </div>
     <div class="px-10 pt-20">
       <div
         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10"
       >
-        <h2 class="text-2xl font-bold">Search Client By</h2>
-        <!-- Displays Client Name search field -->
+        <h2 class="text-2xl font-bold">Search Service By</h2>
+        <!-- Displays Service Name search field -->
         <div class="flex flex-col">
           <select
             class="rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
             v-model="searchBy"
           >
-            <option value="Client Name">Client Name</option>
-            <option value="Client Number">Client Number</option>
+            <option value="Event Name">Service Name</option>
+            <option value="Event Date">Service Description</option>
           </select>
         </div>
-        <div class="flex flex-col" v-if="searchBy === 'Client Name'">
+        <div class="flex flex-col" v-if="searchBy === 'Service Name'">
           <label class="block">
             <input
               type="text"
               class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-              v-model="firstName"
+              v-model="name"
               v-on:keyup.enter="handleSubmitForm"
-              placeholder="Enter first name"
+              placeholder="Enter service name"
             />
           </label>
         </div>
-        <div class="flex flex-col" v-if="searchBy === 'Client Name'">
-          <label class="block">
-            <input
-              type="text"
-              class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-              v-model="lastName"
-              v-on:keyup.enter="handleSubmitForm"
-              placeholder="Enter last name"
-            />
-          </label>
-        </div>
-        <!-- Displays Client Number search field -->
-        <div class="flex flex-col" v-if="searchBy === 'Client Number'">
+        <!-- Displays Service Description search field -->
+        <div class="flex flex-col" v-if="searchBy === 'Service Description'">
           <input
             class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-            type="text"
-            v-model="phoneNumber"
+            type="date"
+            v-model="eventDate"
             v-on:keyup.enter="handleSubmitForm"
-            placeholder="Enter Client Phone Number"
           />
         </div>
       </div>
@@ -130,7 +117,7 @@ export default {
             @click="handleSubmitForm"
             type="submit"
           >
-            Search Client
+            Search Service
           </button>
         </div>
       </div>
@@ -142,31 +129,27 @@ export default {
       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10"
     >
       <div class="ml-10">
-        <h2 class="text-2xl font-bold">List of Clients</h2>
+        <h2 class="text-2xl font-bold">List of Services</h2>
         <h3 class="italic">Click table row to edit/display an entry</h3>
       </div>
       <div class="flex flex-col col-span-2">
         <table class="min-w-full shadow-md rounded">
           <thead class="bg-gray-50 text-xl">
             <tr>
-              <th class="p-4 text-left">Name</th>
-              <th class="p-4 text-left">Phone number</th>
-              <th class="p-4 text-left">City</th>
+              <th class="p-4 text-left">Service Name</th>
+              <th class="p-4 text-left">Service Type</th>
+              <th class="p-4 text-left">Service Description</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-300">
             <tr
-            @click="user.role === '1' && editClient(client._id)"
-              v-for="client in queryData"
-              :key="client._id"
+              @click="editService(service._id)"
+              v-for="service in services"
+              :key="service._id"
             >
-              <td class="p-2 text-left">
-                {{ client.firstName + ' ' + client.lastName }}
-              </td>
-              <td class="p-2 text-left">
-                {{ client.phoneNumber.primary }}
-              </td>
-              <td class="p-2 text-left">{{ client.address.city }}</td>
+              <td class="p-2 text-left">{{ service.serviceName }}</td>
+              <td class="p-2 text-left">{{ service.serviceType }}</td>
+              <td class="p-2 text-left">{{ service.serviceDescription }}</td>
             </tr>
           </tbody>
         </table>
