@@ -147,7 +147,7 @@ export default {
           </thead>
           <tbody class="divide-y divide-gray-300">
             <tr
-              @click="editService(service._id)"
+              @click="user.role === '1' && editService(service._id)"
               v-for="service in services"
               :key="service._id"
             >
