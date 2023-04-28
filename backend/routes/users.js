@@ -10,8 +10,8 @@ router.post('/login', async (req, res, next) => {
     console.log('Hello')
     const { username, password} = req.body;
     const user = await users.findOne({ username:username });
-    console.log('username:', username);
-    console.log('password:', password);
+    //console.log('username:', username);
+    //console.log('password:', password);
     if (!user) {
       return res.status(401).json({ message: 'Invalid username or password' });
     }
@@ -22,8 +22,8 @@ router.post('/login', async (req, res, next) => {
     else {
       res.status(200).json(user);
     }
-    console.log(user.hashedPassword);
-    console.log(user.role);
+    //console.log(user.hashedPassword);
+   // console.log(user.role);
   } catch (err) {
     next(err);
   }

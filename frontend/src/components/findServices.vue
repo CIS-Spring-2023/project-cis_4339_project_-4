@@ -6,13 +6,13 @@ const apiURL = import.meta.env.VITE_ROOT_API
 export default {
   data() {
     return {
-      events: [],
+      services: [],
       // Parameter for search to occur
       searchBy: '',
-      serviceName: ''
+      serviceSearchValue: ''
     }
   },
-  mounted() {
+  created() {
     this.getServices()
   },
   methods: {
@@ -27,8 +27,11 @@ export default {
     },
     handleSubmitForm() {
       let endpoint = ''
-      if (this.searchBy === 'Service Name') {
-        endpoint = `services/search/?serviceName=${this.serviceName}&searchBy=name`
+      if (this.searchBy) {
+        endpoint = `services/searchservices/?serviceSearchValue=${this.serviceSearchValue}&searchBy=${this.searchBy}`
+      }
+      else{
+        alert("invalid searchBy")
       }
       axios.get(`${apiURL}/${endpoint}`).then((res) => {
         this.services = res.data
@@ -37,17 +40,17 @@ export default {
     // abstracted method to get services
     getServices() {
       axios.get(`${apiURL}/services`).then((res) => {
-        this.events = res.data
+        this.services = res.data
       })
       window.scrollTo(0, 0)
     },
     clearSearch() {
       // Resets all the variables
       this.searchBy = ''
-      this.serviceNname = ''
+      this.serviceName = ''
       this.getServices()
     },
-    editService(eventID) {
+    editService(serviceID) {
       this.$router.push({ name: 'servicedetails', params: { id: serviceID } })
     }
   }
@@ -74,28 +77,29 @@ export default {
             class="rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
             v-model="searchBy"
           >
-            <option value="Event Name">Service Name</option>
-            <option value="Event Date">Service Description</option>
+            <option value="name">Name</option>
+            <option value="description">Description</option>
           </select>
         </div>
-        <div class="flex flex-col" v-if="searchBy === 'Service Name'">
+        <div class="flex flex-col" v-if="searchBy === 'name'">
           <label class="block">
             <input
               type="text"
               class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-              v-model="name"
+              v-model="serviceSearchValue"
               v-on:keyup.enter="handleSubmitForm"
               placeholder="Enter service name"
             />
           </label>
         </div>
         <!-- Displays Service Description search field -->
-        <div class="flex flex-col" v-if="searchBy === 'Service Description'">
+        <div class="flex flex-col" v-if="searchBy === 'description'">
           <input
             class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-            type="date"
-            v-model="eventDate"
+            type="text"
+            v-model="serviceSearchValue"
             v-on:keyup.enter="handleSubmitForm"
+            placeholder="Enter service description"
           />
         </div>
       </div>
@@ -137,7 +141,7 @@ export default {
           <thead class="bg-gray-50 text-xl">
             <tr>
               <th class="p-4 text-left">Service Name</th>
-              <th class="p-4 text-left">Service Type</th>
+              <!--<th class="p-4 text-left">Service Type</th>-->
               <th class="p-4 text-left">Service Description</th>
             </tr>
           </thead>
@@ -147,9 +151,9 @@ export default {
               v-for="service in services"
               :key="service._id"
             >
-              <td class="p-2 text-left">{{ service.serviceName }}</td>
-              <td class="p-2 text-left">{{ service.serviceType }}</td>
-              <td class="p-2 text-left">{{ service.serviceDescription }}</td>
+              <td class="p-2 text-left">{{ service.name }}</td>
+              <!--<td class="p-2 text-left">{{ service.type}}</td>-->
+              <td class="p-2 text-left">{{ service.description }}</td>
             </tr>
           </tbody>
         </table>

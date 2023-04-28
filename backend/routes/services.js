@@ -6,7 +6,7 @@ const org = process.env.ORG
 // importing data model schemas
 const { services } = require('../models/models')
 
-// GET 10 most recent services for org
+// GET 20 most recent services for org
 router.get('/', (req, res, next) => {
   services
     .find({ org: org }, (error, data) => {
@@ -18,7 +18,7 @@ router.get('/', (req, res, next) => {
     })
     // sort by date ascending
     .sort({ name: 1 })
-    .limit(10)
+    .limit(20)
 })
 // GET all active services for org
 router.get('/active', (req, res, next) => {
@@ -47,6 +47,33 @@ router.get('/id/:id', (req, res, next) => {
     }
   })
 })
+
+// GET services based on search query
+// Ex: '...?name=servicename&searchBy=name'
+router.get('/searchservices/', (req, res, next) => {
+
+  console.log(req.query.searchBy)
+  const dbQuery = { org: org }
+  switch (req.query.searchBy) {
+    case 'name':
+      // match service name, no anchor
+      dbQuery.name = { $regex: `${req.query.serviceSearchValue}`, $options: 'i' }
+      break
+    case 'description':
+      dbQuery.description = { $regex: `${req.query.serviceSearchValue}`, $options: 'i' }
+      break
+    default:
+      return res.status(400).send('invalid searchBy')
+  }
+  services.find(dbQuery, (error, data) => {
+    if (error) {
+      return next(error)
+    } else {
+      res.json(data)
+    }
+  })
+})
+
 
 // GET events based on search query
 // Ex: '...?name=Food&searchBy=name'
@@ -77,6 +104,7 @@ router.get('/search/', (req, res, next) => {
 router.post('/', (req, res, next) => {
   const newServices = req.body
   newServices.org = org
+  console.log(newServices)
   services.create(newServices, (error, data) => {
     if (error) {
       return next(error)
