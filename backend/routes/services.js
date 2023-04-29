@@ -20,7 +20,7 @@ router.get('/', (req, res, next) => {
     .sort({ name: 1 })
     .limit(20)
 })
-// GET all active services for org
+// GET all active services for org, these active services will be displayed in Create Event form or Edit Event
 router.get('/active', (req, res, next) => {
   services
     .find({ $and: [{org: org }, {status: 'Active'}] } , (error, data) => {
@@ -59,9 +59,11 @@ router.get('/searchservices/', (req, res, next) => {
       // match service name, no anchor
       dbQuery.name = { $regex: `${req.query.serviceSearchValue}`, $options: 'i' }
       break
+      // match service description, no anchor
     case 'description':
       dbQuery.description = { $regex: `${req.query.serviceSearchValue}`, $options: 'i' }
       break
+      // match service status
     case 'status':
       dbQuery.status = { $eq: req.query.serviceSearchValue }
       break
@@ -92,7 +94,7 @@ router.post('/', (req, res, next) => {
   })
 })
  
-// PUT update service
+// PUT update service data
 router.put('/update/:id', (req, res, next) => {
     services.findByIdAndUpdate(req.params.id, req.body, (error, data) => {
     if (error) {
@@ -119,7 +121,7 @@ router.put('/updatestatus/:id', (req, res, next) => {
   })
 
 
-// hard DELETE event by ID, as per project specifications
+// hard DELETE service by ID, as per project specifications
 router.delete('/:id', (req, res, next) => {
   services.findByIdAndDelete(req.params.id, (error, data) => {
     if (error) {
