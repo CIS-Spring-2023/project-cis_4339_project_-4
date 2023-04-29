@@ -25,7 +25,7 @@ For example:
 
 ## Postman Documentation
 
-Can be found at <https://documenter.getpostman.com/view/23133138/2s83mdJiqh>
+Can be found at <https://documenter.getpostman.com/view/19725084/2s93eR3usZ>
 
 ## Application Deployment to the cloud link:
 
