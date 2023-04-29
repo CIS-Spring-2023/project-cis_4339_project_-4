@@ -62,30 +62,8 @@ router.get('/searchservices/', (req, res, next) => {
     case 'description':
       dbQuery.description = { $regex: `${req.query.serviceSearchValue}`, $options: 'i' }
       break
-    default:
-      return res.status(400).send('invalid searchBy')
-  }
-  services.find(dbQuery, (error, data) => {
-    if (error) {
-      return next(error)
-    } else {
-      res.json(data)
-    }
-  })
-})
-
-
-// GET events based on search query
-// Ex: '...?name=Food&searchBy=name'
-router.get('/search/', (req, res, next) => {
-  const dbQuery = { org: org }
-  switch (req.query.searchBy) {
-    case 'name':
-      // match event name, no anchor
-      dbQuery.name = { $regex: `${req.query.name}`, $options: 'i' }
-      break
     case 'status':
-      dbQuery.status = { $eq: req.query.status }
+      dbQuery.status = { $eq: req.query.serviceSearchValue }
       break
     default:
       return res.status(400).send('invalid searchBy')
@@ -100,7 +78,7 @@ router.get('/search/', (req, res, next) => {
 })
 
 
-// POST new service
+// POST add new service
 router.post('/', (req, res, next) => {
   const newServices = req.body
   newServices.org = org
