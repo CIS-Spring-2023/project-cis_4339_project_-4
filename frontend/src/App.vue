@@ -137,7 +137,7 @@ export default {
     axios.get(`${apiURL}/org`).then((res) => {
       console.log(res.data)
       if (res.data && res.data.name) {
-      this.orgName = res.data.name
+      this.orgName = res.data.name //Replace instance name with the organization name from MongoDB 
     } else {
       console.error('Invalid response from server:', res)
     }
