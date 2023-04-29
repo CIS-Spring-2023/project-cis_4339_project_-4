@@ -23,7 +23,10 @@ router.get('/', (req, res, next) => {
 // GET all active services for org, these active services will be displayed in Create Event form or Edit Event
 router.get('/active', (req, res, next) => {
   services
-    .find({ $and: [{org: org }, {status: 'Active'}] } , (error, data) => {
+    .find({ $and: [
+      {or:[{orgs: { $in: [org] } },{org:org}]} , 
+      
+      {status: 'Active'}] } , (error, data) => {
       if (error) {
         return next(error)
       } else {
@@ -50,7 +53,7 @@ router.get('/id/:id', (req, res, next) => {
 
 // GET services based on search query
 // Ex: '...?name=servicename&searchBy=name'
-router.get('/searchservices/', (req, res, next) => {
+router.get('/search/', (req, res, next) => {
 
   console.log(req.query.searchBy)
   const dbQuery = { org: org }
@@ -63,10 +66,12 @@ router.get('/searchservices/', (req, res, next) => {
     case 'description':
       dbQuery.description = { $regex: `${req.query.serviceSearchValue}`, $options: 'i' }
       break
+
       // match service status
     case 'status':
       dbQuery.status = { $eq: req.query.serviceSearchValue }
       break
+
     default:
       return res.status(400).send('invalid searchBy')
   }
@@ -80,10 +85,11 @@ router.get('/searchservices/', (req, res, next) => {
 })
 
 
+
 // POST add new service
 router.post('/', (req, res, next) => {
   const newServices = req.body
-  newServices.org = org
+  
   console.log(newServices)
   services.create(newServices, (error, data) => {
     if (error) {

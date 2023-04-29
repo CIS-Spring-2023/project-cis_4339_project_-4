@@ -47,7 +47,14 @@ const routes = [
       name: 'findservices',
       component: () => import('../components/findServices.vue'),
       meta: { requiresAuth: true, role: 1}
-    },,
+    },
+    {
+      path: '/servicedetails/:id',
+      name: 'servicedetails',
+      props: true,
+      component: () => import('../components/serviceDetails.vue'),
+      meta: { requiresAuth: true}
+    },
     {
       path: '/eventform',
       name: 'eventform',
@@ -74,6 +81,7 @@ const routes = [
       component: () => import('../components/eventDetails.vue'),
       meta: { requiresAuth: true}
     }, 
+
   ]
   const router = createRouter({
     history: createWebHistory(),
