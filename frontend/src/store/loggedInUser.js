@@ -12,6 +12,7 @@ export const useLoggedInUserStore = defineStore({
     return {
       name: "",
       role: 0,
+      orgid: 0, 
       isLoggedIn: false
     }
   },
@@ -29,7 +30,9 @@ export const useLoggedInUserStore = defineStore({
         this.$patch({
           isLoggedIn: 'true',
           role: response.data.role,
-          name: response.data.username
+          name: response.data.username,
+          
+          orgid: response.data.org
         });
         console.log(response)
         this.$router.push("/");

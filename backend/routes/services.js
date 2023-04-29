@@ -23,7 +23,10 @@ router.get('/', (req, res, next) => {
 // GET all active services for org
 router.get('/active', (req, res, next) => {
   services
-    .find({ $and: [{org: org }, {status: 'Active'}] } , (error, data) => {
+    .find({ $and: [
+      {or:[{orgs: { $in: [org] } },{org:org}]} , 
+      
+      {status: 'Active'}] } , (error, data) => {
       if (error) {
         return next(error)
       } else {
@@ -50,7 +53,7 @@ router.get('/id/:id', (req, res, next) => {
 
 // GET services based on search query
 // Ex: '...?name=servicename&searchBy=name'
-router.get('/searchservices/', (req, res, next) => {
+router.get('/search/', (req, res, next) => {
 
   console.log(req.query.searchBy)
   const dbQuery = { org: org }
@@ -75,35 +78,11 @@ router.get('/searchservices/', (req, res, next) => {
 })
 
 
-// GET events based on search query
-// Ex: '...?name=Food&searchBy=name'
-router.get('/search/', (req, res, next) => {
-  const dbQuery = { org: org }
-  switch (req.query.searchBy) {
-    case 'name':
-      // match event name, no anchor
-      dbQuery.name = { $regex: `${req.query.name}`, $options: 'i' }
-      break
-    case 'status':
-      dbQuery.status = { $eq: req.query.status }
-      break
-    default:
-      return res.status(400).send('invalid searchBy')
-  }
-  services.find(dbQuery, (error, data) => {
-    if (error) {
-      return next(error)
-    } else {
-      res.json(data)
-    }
-  })
-})
-
 
 // POST new service
 router.post('/', (req, res, next) => {
   const newServices = req.body
-  newServices.org = org
+  
   console.log(newServices)
   services.create(newServices, (error, data) => {
     if (error) {

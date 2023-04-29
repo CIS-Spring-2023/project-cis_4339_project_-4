@@ -3,10 +3,12 @@ import useVuelidate from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
 import axios from 'axios';
 const apiURL = import.meta.env.VITE_ROOT_API
+import { useLoggedInUserStore } from "@/store/loggedInUser";
 export default {
   name: 'serviceform',
   setup() {
-    return { v$: useVuelidate({ $autoDirty: true }) }
+    const user = useLoggedInUserStore();
+    return { v$: useVuelidate({ $autoDirty: true }), user }
   },
   data() {
     return {
@@ -14,7 +16,8 @@ export default {
       service: {
         name: '',
         status: 'Active',
-        description: ''
+        description: '',
+        orgs: []
       }
     }
   } ,  
@@ -34,6 +37,7 @@ export default {
       // If no errors found. then the form is submitted
       if (isFormCorrect) 
       {
+        this.service.orgs.push(this.user.orgid)
          axios
           .post(`${apiURL}/services`, this.service)
           .then(() => {

@@ -110,7 +110,31 @@ export default {
           <div></div>
           <div></div>
           <div></div>
-
+          <div><h2 class="text-2xl font-bold">Service Status</h2></div>
+            <div>
+              <label for="active" class="inline-flex items-center">
+                <input
+                  type="radio"
+                  id="Active"
+                  value="Active"
+                  v-model="service.status"
+                  class=" border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-offset-0 focus:ring-indigo-200 focus:ring-opacity-50"
+                  checked
+                />
+                <span class="ml-3">Active</span>
+              </label>
+              <label for="inactive" class="inline-flex items-center">
+                <input
+                  type="radio"
+                  id="Inactive"
+                  value="Inactive"
+                  v-model="service.status"
+                  class=" border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-offset-0 focus:ring-indigo-200 focus:ring-opacity-50"
+                  notchecked
+                />
+                <span class="ml-3">Inactive</span>
+              </label>
+            </div>
 
         </div>
 

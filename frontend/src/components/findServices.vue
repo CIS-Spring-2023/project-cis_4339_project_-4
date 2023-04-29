@@ -33,7 +33,7 @@ export default {
     handleSubmitForm() {
       let endpoint = ''
       if (this.searchBy) {
-        endpoint = `services/searchservices/?serviceSearchValue=${this.serviceSearchValue}&searchBy=${this.searchBy}`
+        endpoint = `services/search/?serviceSearchValue=${this.serviceSearchValue}&searchBy=${this.searchBy}`
       }
       else{
         alert("invalid searchBy")
@@ -44,7 +44,7 @@ export default {
     },
     // abstracted method to get services
     getServices() {
-      axios.get(`${apiURL}/services`).then((res) => {
+      axios.get(`${apiURL}/services/active`).then((res) => {
         this.services = res.data
       })
       window.scrollTo(0, 0)
