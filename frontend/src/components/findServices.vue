@@ -2,8 +2,13 @@
 import { DateTime } from 'luxon'
 import axios from 'axios'
 const apiURL = import.meta.env.VITE_ROOT_API
+import { useLoggedInUserStore } from "@/store/loggedInUser";
 
 export default {
+  setup() {
+    const user = useLoggedInUserStore();
+    return { user };
+  },
   data() {
     return {
       services: [],
@@ -94,6 +99,7 @@ export default {
         </div>
         <!-- Displays Service Description search field -->
         <div class="flex flex-col" v-if="searchBy === 'description'">
+          <label class="block">
           <input
             class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
             type="text"
@@ -101,6 +107,7 @@ export default {
             v-on:keyup.enter="handleSubmitForm"
             placeholder="Enter service description"
           />
+          </label>
         </div>
       </div>
       <div
