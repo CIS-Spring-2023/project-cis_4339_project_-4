@@ -16,8 +16,8 @@ export const useLoggedInUserStore = defineStore({
       isLoggedIn: false
     }
   },
-// Get username, password value from the form and send to the simulated login API
-// If the username and password match, set isAllowed to true and direct user to the home page using router
+// Get username, password value from the form and send to the backend for verification using POST request
+// If the username and password match, set isAllowed to true, retrieve user's information and direct user to the home page using router
 // If the username and password match, set isAllowed to false and prompt an error message
   actions: {
     async login(username, password) {
@@ -28,7 +28,7 @@ export const useLoggedInUserStore = defineStore({
         if(response)
         {
         this.$patch({
-          isLoggedIn: 'true',
+          isLoggedIn: true,
           role: response.data.role,
           name: response.data.username,
           

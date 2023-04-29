@@ -68,6 +68,13 @@ const routes = [
       meta: { requiresAuth: true, role: 1}
     },
     {
+      path: '/editservice/:id',
+      name: 'editservice',
+      props: true,
+      component: () => import('../components/editservice.vue'),
+      meta: { requiresAuth: true}
+    },
+    {
       path: '/eventdetails/:id',
       name: 'eventdetails',
       props: true,
