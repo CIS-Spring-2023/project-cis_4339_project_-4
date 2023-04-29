@@ -21,7 +21,7 @@ export default {
     this.getServices()
   },
   methods: {
-    // search event based on service name and status
+    // search event based on service name, description and status
     handleSubmitForm() {
       let endpoint = ''
       if (this.searchBy) {
@@ -34,7 +34,7 @@ export default {
         this.services = res.data
       })
     },
-    // abstracted method to get services
+    // abstracted method to get top 20 services
     getServices() {
       axios.get(`${apiURL}/services`).then((res) => {
         this.services = res.data
@@ -50,9 +50,10 @@ export default {
       
     },
     editService(serviceID) {
+    //route to edit service page when clicking on a certain service
       this.$router.push({ name: 'editservice', params: { id: serviceID } })
     },
-    // soft delete service by turning service 'Active' status to 'Inactive'
+    // soft delete service by turning service 'Active' status to 'Inactive' status
     deactivateService(id)
     {
       axios.put(`${apiURL}/services/updatestatus/${id}`)
