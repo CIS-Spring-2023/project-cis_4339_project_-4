@@ -35,10 +35,10 @@ export default {
       if (isFormCorrect) 
       {
          axios
-          .post(`${apiURL}/services`, this.service)
+          .post(`${apiURL}/services`, this.service) //Send services info to the backend using POST API
           .then(() => {
             alert('Service has been added.')
-            this.$router.push({ name: 'findservices' })
+            this.$router.push({ name: 'findservices' }) //route user to find service page
           })
           .catch((error) => {
             console.log(error)
