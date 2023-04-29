@@ -19,7 +19,7 @@ export default {
       }
     },
   created() {
-  // get top 10 services by sending GET request to backend
+  // get certain service info by sending GET request along with service id to backend
     axios.get(`${apiURL}/services/id/${this.$route.params.id}`).then((res) => {
       this.services = res.data
     })
