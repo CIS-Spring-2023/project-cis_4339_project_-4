@@ -86,7 +86,7 @@ const eventDataSchema = new Schema(
     _id: { type: String, default: uuid.v1 },
     orgs: {
       type: [{ type: String, ref: 'org' }],
-      required: true,
+      required: true
       //validate: [(org) => org.length > 0, 'needs at least one org']
     },
     name: {
